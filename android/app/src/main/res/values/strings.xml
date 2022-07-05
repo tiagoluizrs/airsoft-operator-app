@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Airsoft Operator</string>
+    <string name="title_activity_main">Airsoft Operator</string>
+    <string name="package_name">dev.tiagosilva.airsoftoperator</string>
+    <string name="custom_url_scheme">dev.tiagosilva.airsoftoperator</string>
+</resources>
