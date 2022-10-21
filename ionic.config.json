@@ -1,7 +1,0 @@
-{
-  "name": "airsoft-operator-app",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
