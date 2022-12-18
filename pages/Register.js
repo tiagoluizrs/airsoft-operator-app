@@ -1,5 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { useState } from "react";
+import { useTheme } from 'react-native-paper';
 
 import { register } from "../util/auth";
 
@@ -7,11 +8,15 @@ import { Avatar  } from 'react-native-paper';
 import { TextInput, Button } from '../components';
 
 const Register = ({ navigation }) => {
+  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   return (
-    <View style={style.box}>
+    <View style={{
+        ...style.box,
+        backgroundColor: theme.colors.bgColor
+      }}>
       <Avatar.Image 
           style={style.avatar}
           size={150} source={require('../assets/logo.png')} />

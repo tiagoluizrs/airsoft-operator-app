@@ -1,15 +1,53 @@
-import { storeData, getData } from "./storage";
+import { post, get } from "./request";
+import { storeData, getData, clearData } from "./storage";
 
 const userIsLoggedIn = async () => {
-  const result = await getData("user");
+  const result = await getData("token");
   return result;
 };
 
-const login = async (emailText, passwordText) => {
+const refreshToken = async (token) => {
   try {
+    let response = await post('api-token-refresh', {
+      token
+    }, {}, false);
+
+    await storeData('token', response.data.token)
+
     return {
       status: 200,
-      message: "Usuário logado co sucesso!",
+      message: "Token atualizado com sucesso!",
+    };
+  } catch (err) {
+    return {
+      status: 400,
+      message: "",
+    };
+  }
+}
+
+const login = async (username, password) => {
+  try {
+    let response = await post('api-token-auth', {
+      username, password
+    }, {}, false);
+
+    await storeData('token', response.data.token)
+    response = await get(`profile/get_by_username`, {}, {username}, true);
+
+    const { team, patent, team_image, image } = response.data;
+    storeData('user', {
+       patent, team_image, image,
+       ...response.data.user,
+       ...{
+          team_id: response.data.team.id,
+          team_name: response.data.team.name,
+          team_image: response.data.team.image
+       }
+    })
+
+    return {
+      status: response.status,
     };
   } catch (err) {
     return {
@@ -35,6 +73,7 @@ const register = async (email, password) => {
 
 const logout = () => {
   storeData("user", null);
+  storeData("token", null);
 };
 
 export { login, register, userIsLoggedIn, logout };

@@ -1,7 +1,10 @@
 import { View, Text } from "react-native";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useTheme } from 'react-native-paper';
 
 const Home = () => {
+  const theme = useTheme();
+  
   useEffect(() => {}, []);
 
   return (
@@ -12,6 +15,7 @@ const Home = () => {
         alignItems: "center",
         height: "100%",
         padding: 20,
+        backgroundColor: theme.colors.bgColor
       }}
     ><Text>Home</Text></View>
   );

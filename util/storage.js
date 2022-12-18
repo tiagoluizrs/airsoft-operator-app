@@ -42,6 +42,14 @@ const getData = async (key) => {
   }
 };
 
+const clearData = async (key) => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    // error reading value
+  }
+};
+
 const verifyTheme = async (setMode) => {
   const colorScheme = Appearance.getColorScheme();
   let mode = await getData("mode");

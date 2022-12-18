@@ -1,24 +1,27 @@
+// Libs
+import { Provider as PaperProvider } from 'react-native-paper';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { initializeApp } from "firebase/app";
+import { useState, useEffect } from "react";
+import { userIsLoggedIn, logout } from "./util/auth";
+
+// Customs (Theme, Envs etc)
+import { lightTheme, darkTheme } from "./theme";
+import { BASE_URL_API } from '@env';
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 
+// Components
 import { Switch } from "./components";
 
+// Utils
 import { storeData, verifyTheme } from "./util/storage";
-
-import { Provider as PaperProvider } from 'react-native-paper';
-
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-import { initializeApp } from "firebase/app";
-import { useState, useEffect } from "react";
-import { userIsLoggedIn, logout } from "./util/auth";
-import { lightTheme, darkTheme } from "./theme";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -68,7 +71,7 @@ export default function App() {
         {isLoggedIn ? (
           <Tab.Navigator
             screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
+              tabBarIcon: ({ color, size }) => {
                 let icon = "";
                 switch (route.name) {
                   case "Home":
@@ -81,20 +84,24 @@ export default function App() {
 
                 return <Icon name={icon} size={size} color={color} />;
               },
-              tabBarActiveTintColor: "blue",
-              tabBarInactiveTintColor: "gray",
+              tabBarActiveTintColor: mode === 'light' ? lightTheme.colors.primary : darkTheme.colors.primary,
+              tabBarInactiveTintColor: mode === 'light' ? 'gray' : "#fff",
             })}
-            initialRouteName="Home"
+            initialRouteName="Profile"
           >
             <Tab.Screen
               name="Home"
               component={Home}
-              initialParams={{
-                firebaseApp,
-              }}
               options={{
                 title: "Home",
                 headerRight: rightButtons,
+                headerStyle: {
+                  backgroundColor: mode === 'light' ? lightTheme.colors.bgColor : darkTheme.colors.bgColor,
+                },
+                headerTintColor:  mode === 'light' ? lightTheme.colors.textColor : darkTheme.colors.textColor,
+                tabBarStyle: {
+                  backgroundColor: mode === 'light' ? lightTheme.colors.bgColor : darkTheme.colors.bgColor,
+                }
               }}
             />
             <Tab.Screen
@@ -103,6 +110,13 @@ export default function App() {
               options={{
                 title: "Perfil",
                 headerRight: rightButtons,
+                headerStyle: {
+                  backgroundColor: mode === 'light' ? lightTheme.colors.bgColor : darkTheme.colors.bgColor,
+                },
+                headerTintColor:  mode === 'light' ? lightTheme.colors.textColor : darkTheme.colors.textColor,
+                tabBarStyle: {
+                  backgroundColor: mode === 'light' ? lightTheme.colors.bgColor : darkTheme.colors.bgColor,
+                }
               }}
             />
           </Tab.Navigator>
