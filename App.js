@@ -1,3 +1,4 @@
+
 // Libs
 import { Provider as PaperProvider } from 'react-native-paper';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
@@ -117,6 +118,9 @@ export default function App() {
                 tabBarStyle: {
                   backgroundColor: mode === 'light' ? lightTheme.colors.bgColor : darkTheme.colors.bgColor,
                 }
+              }}
+              initialParams={{
+                firebaseApp
               }}
             />
           </Tab.Navigator>
