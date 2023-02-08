@@ -48,6 +48,7 @@ const TeamSelect = ({ onPress, queryText }) => {
            </View>
 }
 
+
 TeamSelect.defaultProps = {
     queryText: ""
 }

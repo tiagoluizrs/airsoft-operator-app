@@ -1,10 +1,12 @@
-import { BASE_URL_API } from '@env';
+// import { BASE_URL_API } from '@env';
 import axios from 'axios';
 import { getData } from './storage';
 
 let headers = {
     'Content-Type': 'application/json'
 };
+
+const BASE_URL_API = 'http://192.168.68.102:8000/api'
 
 const getToken = async (header) => {
     const token = await getData('token');
@@ -41,6 +43,7 @@ const post = async (endpoint, data, header={}, sendToken=true) => {
     if(sendToken){
         headers = await getToken(headers);
     }
+    console.log('oi')
 
     return await axios({
         method: "post",
@@ -50,6 +53,24 @@ const post = async (endpoint, data, header={}, sendToken=true) => {
     });
 }
 
+const patch = async (endpoint, data, header={}, sendToken=true) => {
+    headers = {
+        ...headers,
+        ...header
+    };
+
+    if(sendToken){
+        headers = await getToken(headers);
+    }
+
+    return await axios({
+        method: "patch",
+        url: `${BASE_URL_API}/${endpoint}/`,
+        data,
+        headers
+    });
+}
+
 export {
-    get, post
+    get, post, patch
 }
