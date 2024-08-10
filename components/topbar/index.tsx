@@ -1,9 +1,11 @@
 import {AppBar, Menu} from "@/components";
 import {useState} from "react";
 import {router} from "expo-router";
+import {useSession} from "@/app/ctx";
 
 const Topbar = (props: any) => {
     const [visible, setVisible] = useState(false);
+    const { signOut } = useSession();
 
     return  <>
                 <AppBar
@@ -31,6 +33,11 @@ const Topbar = (props: any) => {
                                     router.push("/settings");
                                 },
                                 title: "Configurações"
+                            },
+                            {
+                                leadingIcon:"logout",
+                                onPress: signOut,
+                                title: "Sair"
                             },
 
                         ]}/> : null

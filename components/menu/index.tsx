@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { View } from 'react-native';
-import { Menu as Mn } from 'react-native-paper';
+import { Menu as Mn, Surface  } from 'react-native-paper';
 
 const Menu = (props: any) => {
-    return props.visible ? <View style={{
+    return props.visible ? <Surface style={{
                                 flex: 1,
                                 position: 'absolute',
-                                right: 0,
+                                right: 20,
                                 top: 80,
                                 backgroundColor: 'white',
                                 zIndex: 1000,
@@ -22,7 +21,7 @@ const Menu = (props: any) => {
                                         />
                                     )) : null
                                 }
-                            </View> : null;
+                            </Surface> : null;
 };
 
 Menu.defaultProps = {
