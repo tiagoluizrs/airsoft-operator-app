@@ -70,10 +70,10 @@ export default function SignUp() {
                     ...styles.padding,
                     textAlign: 'center'
                 }}>
-                    <Link href="/sign-up" style={{
+                    <Link href="/sign-in" style={{
                         textAlign: 'center',
                         textDecorationLine: 'underline'
-                    }}>Criar uma conta</Link>
+                    }}>Fazer Login</Link>
                 </Grid>
                 <Grid style={{
                     ...styles.padding

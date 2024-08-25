@@ -5,7 +5,7 @@ import {StyleSheet, View} from 'react-native';
 const getBody = (hasTopBar: boolean) => {
     if (hasTopBar) {
         return {
-            paddingTop: 80,
+            paddingTop: 120,
             display: 'flex',
         };
     }

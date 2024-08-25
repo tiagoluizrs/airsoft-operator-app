@@ -16,7 +16,9 @@ const Topbar = (props: any) => {
                 <AppBar
                     title={props.title}
                     icon={props.menu ? "dots-vertical" : ""}
+                    extraAction={props.extraAction}
                     back={props.back}
+                    backLink={props.backLink}
                     onPress={() => {
                         setVisible(!visible);
                     }}/>
@@ -56,6 +58,8 @@ const Topbar = (props: any) => {
 
 Topbar.defaultProps = {
     menu: true,
+    backLink: null,
+    extraActions: null,
     back: null,
 }
 
