@@ -2,12 +2,17 @@ import {AppBar, Menu} from "@/components";
 import {useState} from "react";
 import {router} from "expo-router";
 import {useSession} from "@/app/ctx";
+import {View} from "react-native";
 
 const Topbar = (props: any) => {
     const [visible, setVisible] = useState(false);
     const { signOut } = useSession();
 
-    return  <>
+    return  <View style={{
+        position: "absolute",
+        width: "100%",
+        zIndex: 1000
+    }}>
                 <AppBar
                     title={props.title}
                     icon={props.menu ? "dots-vertical" : ""}
@@ -36,13 +41,17 @@ const Topbar = (props: any) => {
                             },
                             {
                                 leadingIcon:"logout",
-                                onPress: signOut,
+                                onPress: () => {
+                                    signOut();
+                                    // @ts-ignore
+                                    router.replace("/sign-in");
+                                },
                                 title: "Sair"
                             },
 
                         ]}/> : null
                 }
-            </>
+            </View>
 }
 
 Topbar.defaultProps = {

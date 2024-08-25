@@ -1,13 +1,16 @@
 import { useContext, createContext, type PropsWithChildren } from 'react';
 import { useStorageState } from './useStorageState';
+import {login, register} from "@/services/auth";
 
 const AuthContext = createContext<{
-    signIn: () => void;
+    signIn: (username: string, password: string) => Promise<RequestResponseInterface>;
+    signUp: (email: string, username: string, password: string) => Promise<RequestResponseInterface>;
     signOut: () => void;
     session?: string | null;
     isLoading: boolean;
 }>({
-    signIn: () => null,
+    signIn: async () => ({ data: null, status: 200 }),
+    signUp: async () => ({ data: null, status: 200 }),
     signOut: () => null,
     session: null,
     isLoading: false,
@@ -31,9 +34,20 @@ export function SessionProvider({ children }: PropsWithChildren) {
     return (
         <AuthContext.Provider
             value={{
-                signIn: () => {
-                    // Perform sign-in logic here
-                    setSession('xxx');
+                signIn: async (username: string, password: string): Promise<RequestResponseInterface> => {
+                    const data = await login(username, password);
+                    if(data){
+                        setSession(JSON.stringify(data.data));
+                        return data;
+                    }
+                    return { data: null, status: 500 };
+                },
+                signUp: async (email: string, username: string, password: string): Promise<RequestResponseInterface> => {
+                    const data = await register(email, username, password);
+                    if(data){
+                        return data;
+                    }
+                    return { data: null, status: 500 };
                 },
                 signOut: () => {
                     setSession(null);

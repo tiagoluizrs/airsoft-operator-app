@@ -15,3 +15,5 @@ export { default as List } from './list';
 export { default as Grid } from './grid';
 export { default as Menu } from './menu';
 export { default as Topbar } from './topbar';
+export { default as SearchModal } from './modal/search';
+export { default as Camera } from './modal/camera';

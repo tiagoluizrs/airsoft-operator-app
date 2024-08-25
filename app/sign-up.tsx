@@ -3,18 +3,20 @@ import { ScrollView } from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 
 import { useSession } from './ctx';
-import {Avatar, Button, Grid, TextInput} from "@/components";
+import {Avatar, Button, Grid, Snackbar, TextInput} from "@/components";
 import {useState} from "react";
 
 export default function SignUp() {
-    const { signIn } = useSession();
+    const { signUp } = useSession();
     const theme = useTheme();
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [snackMessage, setSnackMessage] = useState(null);
 
-    // @ts-ignore
-    return (
+    const [email, setEmail] = useState('tiagoluizribeirodasilva@gmail.com');
+    const [username, setUsername] = useState('magrinho');
+    const [password, setPassword] = useState('123456');
+    const [loading, setLoading] = useState(false);
+
+     return (
         <ScrollView>
             <Grid style={{
                 display: 'flex',
@@ -76,17 +78,41 @@ export default function SignUp() {
                 <Grid style={{
                     ...styles.padding
                 }}>
-                    <Button mode="contained" srtyle={{width: '100%'}}
+                    <Button
+                            loading={loading}
+                            mode="contained" srtyle={{width: '100%'}}
                             style={{ backgroundColor: theme.colors.primary }}
-                            onPress={() => {
-                                signIn();
-                                // Navigate after signing in. You may want to tweak this to ensure sign-in is
-                                // successful before navigating.
-                                router.replace('/');
+                            onPress={async () => {
+                                setLoading(true);
+                                const data = await signUp(email.toLowerCase(), username.toLowerCase(), password.toLowerCase());
+                                if (data.status === 201) {
+                                    // @ts-ignore
+                                    setSnackMessage("Usuário cadastrado com sucesso! Confirme seu e-mail a seguir.");
+                                    setTimeout(() => {
+                                        router.push({ pathname: `/confirm`, params: { email } });
+                                    }, 3000)
+                                } else {
+                                    if(data.data.email) {
+                                        setSnackMessage(() => data.data.email[0]);
+                                    }
+                                    else if(data.data.username) {
+                                        setSnackMessage(data.data.username[0]);
+                                    }else {
+                                        // @ts-ignore
+                                        setSnackMessage("Erro ao cadastrar usuário!");
+                                    }
+                                }
+                                setLoading(false);
                             }}>
                         Cadastrar
                     </Button>
                 </Grid>
+                <Snackbar
+                        visible={snackMessage !== null}
+                        duration={3000}
+                        onDismiss={() => setSnackMessage(null)}
+                        text={snackMessage}
+                    />
             </Grid>
         </ScrollView>
     );

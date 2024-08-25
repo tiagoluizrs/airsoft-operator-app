@@ -1,20 +1,13 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {Snackbar as Snack, SnackbarProps} from 'react-native-paper';
 
-const Snackbar = (props: SnackbarProps | any, children: any) => {
-    return (
-        <View style={styles.container}>
-            <Snack {...props}>{props.text}</Snack>
-        </View>
-    );
-};
+interface SnackbarProps {
+    onDismiss?: void
+}
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'space-between',
-    },
-});
+const Snackbar = (props: SnackbarProps | any, children: any) => {
+    return <Snack {...props}>{props.text}</Snack>
+};
 
 export default Snackbar;

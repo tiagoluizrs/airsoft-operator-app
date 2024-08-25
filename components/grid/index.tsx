@@ -2,11 +2,21 @@ import * as React from 'react';
 import { Surface } from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 
+const getBody = (hasTopBar: boolean) => {
+    if (hasTopBar) {
+        return {
+            paddingTop: 80,
+            display: 'flex',
+        };
+    }
+}
+
 const Grid = (props: any) => {
     return props.elevation ?
             <Surface style={{
                 ...styles.surface,
-                ...props.styleSurface
+                ...props.styleSurface,
+                ...getBody(props.hasTopBar)
             }} elevation={3}>
                 <View style={{
                     width: '100%',
@@ -17,7 +27,8 @@ const Grid = (props: any) => {
             </Surface> :
             <View style={{
                 width: '100%',
-                ...props.style
+                ...props.style,
+                ...getBody(props.hasTopBar)
             }}>
                 {props.children}
             </View>;
@@ -26,7 +37,8 @@ const Grid = (props: any) => {
 Grid.defaultProps = {
     elevation: null,
     styleSurface: {},
-    style: {}
+    style: {},
+    hasTopBar: false
 }
 
 export default Grid;
