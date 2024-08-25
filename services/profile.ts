@@ -1,6 +1,7 @@
 import {getHeaders} from "@/services/fetcher";
 import * as SecureStore from "expo-secure-store";
 import {Platform} from "react-native";
+import {generateImageUrl} from "@/services/photo";
 
 const fields: any = {
     'first_name': 'Nome',
@@ -38,12 +39,13 @@ const updateSessionProfile = async (data: any) => {
     }
 }
 
-const updateUser = async (id: string, data: any) => {
+const updateUser = async (id: string, data: any, url: string) => {
     const headers = await getHeaders({
         'headers': {
             'Content-Type': 'application/json'
         }
     });
+    data.image = await generateImageUrl(data.image, data.user.username, url);
 
     const response = await fetch(`http://192.168.3.8:8000/api/profile/${id}/`, {
         method: 'PATCH',

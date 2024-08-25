@@ -1,7 +1,6 @@
 // @ts-nocheck
 import {Avatar, Button, Fab, Grid, SearchModal, Snackbar, TextInput, Topbar} from "@/components";
 import {useEffect, useRef, useState} from "react";
-import {useSession} from "@/app/ctx";
 import {ScrollView, Text} from "react-native";
 import {useTheme} from "react-native-paper";
 import ParentSearch from "@/app/fragments/patent-search";
@@ -38,10 +37,15 @@ export default function ProfileScreen() {
 
     const handleCapture = (data: any) => {
         setProfile((v: any) => ({...v, image: data}));
+        setLoading(false);
     };
 
     const loadData = async () => {
         const data = await getSession();
+        data.profile = {
+            ...data.profile,
+            image: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_URL + data.profile.image
+        }
         setProfile(data.profile);
     }
 
@@ -67,7 +71,11 @@ export default function ProfileScreen() {
                                     ...styles.containerCenterImage
                                 }}>
                                     {
-                                        profile && profile.image !== null && profile.image && undefined ? <Avatar size={230} source={profile.image} /> : <Avatar size={230} icon="account" />
+                                        profile.image ?
+                                            profile.image?.toString().indexOf("http") !== -1 ?
+                                                <Avatar size={230} source={{uri: profile.image}} /> :
+                                                <Avatar size={230} source={profile.image} />
+                                            : <Avatar size={230} icon="account" />
                                     }
                                     <Fab
                                         icon="image"
@@ -78,10 +86,14 @@ export default function ProfileScreen() {
                                         onPress={async () => {
                                             const data = await pickImage(setLoading, false);
                                             setProfile((v: any) => ({...v, image: data}));
+                                            setLoading(false);
                                         }}/>
                                     <Fab
                                         icon="camera"
-                                        onPress={() => setCameraVisible(true)}
+                                        onPress={() => {
+                                            setLoading(true);
+                                            setCameraVisible(true)
+                                        }}
                                         style={{
                                             ...styles.fab,
                                             ...styles.right
@@ -186,11 +198,11 @@ export default function ProfileScreen() {
                             <Button
                                 onPress={async () => {
                                     setLoading(true);
-                                    const data = await updateUser(profile.id, profile);
+                                    const data = await updateUser(profile.id, profile, process.env.EXPO_PUBLIC_FIREBASE_STORAGE_URL);
                                     if(data) {
                                         setSnackMessage(data.message);
                                         if(data.data !== null){
-                                            setProfile((v) => ({...v, ...data.data}));
+                                            loadData();
                                         }
                                     }
                                     else{
